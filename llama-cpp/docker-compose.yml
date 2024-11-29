@@ -1,0 +1,11 @@
+services:
+  llm:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: llm:v1
+    container_name: llm
+    ports:
+      - "1234:1234"
+    tty: true
+    stdin_open: true
