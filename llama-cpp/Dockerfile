@@ -12,6 +12,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     
 RUN pip install --no-cache-dir -r requirements.txt
 
+
+COPY ./Meta-Llama-3-8B-Instruct.Q2_K.gguf .
 COPY . .
 EXPOSE 1234
 
