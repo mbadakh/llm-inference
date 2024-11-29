@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify
-from model_cpu import LlamaChat
+from model_gpu import LlamaChat
 
 # Initialize the model once
 model_path = "./Meta-Llama-3-8B-Instruct.Q2_K.gguf"
@@ -15,7 +15,9 @@ def ask():
     if "query" not in data:
         return jsonify({"error": "Missing 'query' field in the request body"}), 400
     user_query = data["query"]
-    response = llama_chat.send_message(user_query)
+    preMessage = data["preMessage"]
+    schema = data["schema"]
+    response = llama_chat.send_message(user_query,preMessage,schema)
     print(response)
     if response:
         return response,200

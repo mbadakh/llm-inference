@@ -28,22 +28,9 @@ class LlamaChat:
             else "Llama model initialized on CPU."
         )
 
-    def send_message(self, user_message: str):
-        """
-        Send a message to the Llama model and get the response.
-        :param user_message: The user's input message.
-        :return: Response from the Llama model.
-        """
-        try:
-            response = self.llm.create_chat_completion(
-                messages=[
-                    {
-                        "role": "system",
-                        "content": "You are a helpful assistant that outputs in JSON. you should always return a list of 3 valid movie names.",
-                    },
-                    {"role": "user", "content": user_message},
-                ],
-                response_format={
+    def send_message(self, user_message: str, 
+                     preMessage: str = "You are a helpful assistant that outputs in JSON. you should always return a list of 3 valid movie names.", 
+                     schema: map = {
                     "type": "json_object",
                     "schema": {
                         "type": "object",
@@ -58,7 +45,22 @@ class LlamaChat:
                         },
                         "required": ["general_response", "movies"],
                     },
-                },
+                }):
+        """
+        Send a message to the Llama model and get the response.
+        :param user_message: The user's input message.
+        :return: Response from the Llama model.
+        """
+        try:
+            response = self.llm.create_chat_completion(
+                messages=[
+                    {
+                        "role": "system",
+                        "content": preMessage,
+                    },
+                    {"role": "user", "content": user_message},
+                ],
+                response_format = schema,
                 temperature=self.temperature,
             )
 
