@@ -23,5 +23,4 @@ def ask():
 
 
 if __name__ == "__main__":
-    print("Starting the API server. Send requests to http://localhost:1234/ask")
     app.run(host="0.0.0.0", port=1234)
