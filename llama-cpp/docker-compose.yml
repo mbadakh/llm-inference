@@ -6,6 +6,7 @@ services:
     image: llm:v1
     container_name: llm
 #    command: ["sleep","infinity"]
+    restart: always
     ports:
       - "1234:1234"
     tty: true
