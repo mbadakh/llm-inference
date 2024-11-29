@@ -5,7 +5,7 @@ services:
       dockerfile: Dockerfile
     image: llm:v1
     container_name: llm
-    command: ["sleep","infinity"]
+#    command: ["sleep","infinity"]
     ports:
       - "1234:1234"
     tty: true
