@@ -16,4 +16,4 @@ COPY . .
 EXPOSE 1234
 
 ENTRYPOINT ["gunicorn"]
-CMD ["--workers","1","--bind", "0.0.0.0:1234", "wsgi:app","--log-config", "logging.ini", "--timeout", "120"]
+CMD ["--workers","1","--bind", "0.0.0.0:1234", "wsgi:app", "--timeout", "120"]
