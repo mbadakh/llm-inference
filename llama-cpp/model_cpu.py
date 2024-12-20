@@ -3,7 +3,7 @@ from llama_cpp import Llama
 
 class LlamaChat:
     def __init__(
-        self, model_path: str, chat_format: str = "chatml", temperature: float = 0.7
+        self, model_path: str, chat_format: str = "chatml", temperature: float = 0.7, n_gpu_layers: int = -1
     ):
         """
         Initialize the Llama model.
@@ -11,11 +11,32 @@ class LlamaChat:
         :param chat_format: Chat format, default is 'chatml'.
         :param temperature: Sampling temperature for the model.
         """
-        self.llm = Llama(model_path=model_path, chat_format=chat_format)
         self.temperature = temperature
+        self.n_gpu_layers = n_gpu_layers
+        self.llm = Llama(model_path=model_path, chat_format=chat_format,temperature=temperature, n_gpu_layers=n_gpu_layers)
         print("Llama model initialized.")
 
-    def send_message(self, user_message: str):
+    def send_message(
+        self,
+        user_message: str,
+        preMessage: str = "You are a helpful assistant that outputs in JSON. you should always return a list of 3 valid movie names.",
+        schema: map = {
+            "type": "json_object",
+            "schema": {
+                "type": "object",
+                "properties": {
+                    "general_response": {"type": "string"},
+                    "movies": {
+                        "type": "array",
+                        "items": {"type": "string"},
+                        "minItems": 3,
+                        "maxItems": 3,
+                    },
+                },
+                "required": ["general_response", "movies"],
+            },
+        },
+    ):
         """
         Send a message to the Llama model and get the response.
         :param user_message: The user's input message.
@@ -26,26 +47,11 @@ class LlamaChat:
                 messages=[
                     {
                         "role": "system",
-                        "content": "You are a helpful assistant that outputs in JSON. you should always return a list of 3 valid movie names.",
+                        "content": preMessage,
                     },
                     {"role": "user", "content": user_message},
                 ],
-                response_format={
-                    "type": "json_object",
-                    "schema": {
-                        "type": "object",
-                        "properties": {
-                            "general_response": {"type": "string"},
-                            "movies": {
-                                "type": "array",
-                                "items": {"type": "string"},
-                                "minItems": 3,
-                                "maxItems": 3,
-                            },
-                        },
-                        "required": ["general_response", "movies"],
-                    },
-                },
+                response_format=schema,
                 temperature=self.temperature,
             )
 
